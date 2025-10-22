@@ -36,27 +36,60 @@
         }
 
         /* Loading Screen */
-        .loading-screen {
+        #loading-screen {
             position: fixed;
-            top: 0;
-            left: 0;
             width: 100%;
-            height: 100%;
-            background: var(--bg-primary);
+            height: 100vh;
+            background: #0a0a0a;
+            z-index: 9999;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
+            align-items: center; /* vertical center */
+            justify-content: center; /* horizontal center */
             transition: opacity 0.5s ease;
         }
 
-        .loading-text {
-            font-size: 1.2rem;
-            font-weight: 300;
-            letter-spacing: 2px;
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* center items horizontally */
+            gap: 20px; /* spacing between bar and text */
         }
 
-        .loading-screen.fade-out {
+        .loading-bar-border {
+            width: 320px;
+            height: 12px;
+            border: 2px solid #ffffff;
+            border-radius: 25px;
+            background: transparent;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-bar-fill {
+            height: 100%;
+            width: 0;
+            background: #a855f7;
+            border-radius: 23px;
+            box-shadow: 0 0 12px rgba(168, 85, 247, 0.8);
+            animation: fillBar 2.5s ease-out forwards;
+        }
+
+        @keyframes fillBar {
+            to { width: 100%; }
+        }
+
+        .loading-text {
+            text-align: center;
+            margin: 0;
+            font-size: 15px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        #loading-screen.fade-out {
             opacity: 0;
             pointer-events: none;
         }
@@ -635,8 +668,13 @@
     </div>
 
     <!-- Loading Screen -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loading-text">Loading quantum algorithms...</div>
+    <div id="loading-screen">
+        <div class="loading-container">
+            <div class="loading-bar-border">
+                <div class="loading-bar-fill" id="loadingBarFill"></div>
+            </div>
+            <div class="loading-text">Loading...</div>
+        </div>
     </div>
 
     <!-- Mobile Navigation -->
@@ -881,13 +919,15 @@
 
         // Loading screen
         function hideLoadingScreen() {
-            const loadingScreen = document.getElementById('loadingScreen');
+            const loadingScreen = document.getElementById('loading-screen');
+            
+            // Wait for loading animation to complete, then fade out
             setTimeout(() => {
                 loadingScreen.classList.add('fade-out');
                 setTimeout(() => {
                     loadingScreen.style.display = 'none';
                 }, 500);
-            }, 2000);
+            }, 2800); // Slightly longer to let the bar animation complete
         }
 
         // Particle animation system
