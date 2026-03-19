@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANDY LIFTS - Portfolio</title>
+    <title>Andy.Funded - Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --bg-primary: #0a0a0a;
@@ -35,61 +40,75 @@
             overflow-x: hidden;
         }
 
-        /* Loading Screen */
-        #loading-screen {
+        /* Splash Screen */
+        #splash-screen {
             position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100vh;
             background: #0a0a0a;
             z-index: 9999;
             display: flex;
-            align-items: center; /* vertical center */
-            justify-content: center; /* horizontal center */
-            transition: opacity 0.5s ease;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.6s ease;
         }
 
-        .loading-container {
+        .splash-container {
             display: flex;
             flex-direction: column;
-            align-items: center; /* center items horizontally */
-            gap: 20px; /* spacing between bar and text */
-        }
-
-        .loading-bar-border {
-            width: 320px;
-            height: 12px;
-            border: 2px solid #ffffff;
-            border-radius: 25px;
-            background: transparent;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .loading-bar-fill {
-            height: 100%;
-            width: 0;
-            background: #a855f7;
-            border-radius: 23px;
-            box-shadow: 0 0 12px rgba(168, 85, 247, 0.8);
-            animation: fillBar 2.5s ease-out forwards;
-        }
-
-        @keyframes fillBar {
-            to { width: 100%; }
-        }
-
-        .loading-text {
+            align-items: center;
             text-align: center;
-            margin: 0;
-            font-size: 15px;
-            font-weight: 300;
-            letter-spacing: 2px;
-            color: #ffffff;
-            text-transform: uppercase;
         }
 
-        #loading-screen.fade-out {
+        .splash-label {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            color: #888888;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+        }
+
+        .splash-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0 0 16px 0;
+            letter-spacing: -1px;
+        }
+
+        .splash-subtitle {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: #888888;
+            margin: 0 0 40px 0;
+        }
+
+        .splash-btn {
+            background: transparent;
+            border: 2px solid #a855f7;
+            color: #ffffff;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .splash-btn:hover {
+            background: #a855f7;
+            color: #ffffff;
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.4);
+        }
+
+        #splash-screen.fade-out {
             opacity: 0;
             pointer-events: none;
         }
@@ -169,7 +188,7 @@
             height: 100vh;
         }
 
-        .hero > div {
+        .hero>div {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -183,7 +202,7 @@
             margin-bottom: 2.5rem;
             letter-spacing: 5px;
             color: #ffffff;
-            text-shadow: 
+            text-shadow:
                 0 0 10px rgba(255, 255, 255, 0.5),
                 0 0 20px rgba(255, 255, 255, 0.3),
                 0 0 30px rgba(255, 255, 255, 0.2);
@@ -211,8 +230,16 @@
         }
 
         @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0;
+            }
         }
 
         .cta-button {
@@ -275,7 +302,7 @@
             overflow: hidden;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.3),
                 0 0 15px rgba(168, 85, 247, 0.2),
                 inset 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -297,7 +324,7 @@
         .skill-category:hover {
             transform: translateY(-8px) scale(1.02);
             border-color: #8b5cf6;
-            box-shadow: 
+            box-shadow:
                 0 20px 40px rgba(0, 0, 0, 0.4),
                 0 0 30px rgba(168, 85, 247, 0.5),
                 0 0 60px rgba(168, 85, 247, 0.3),
@@ -362,7 +389,7 @@
         .project-card:hover {
             transform: translateY(-8px) scale(1.02);
             border-color: #8b5cf6;
-            box-shadow: 
+            box-shadow:
                 0 15px 30px rgba(0, 0, 0, 0.3),
                 0 0 20px rgba(168, 85, 247, 0.5),
                 0 0 40px rgba(168, 85, 247, 0.3);
@@ -547,16 +574,24 @@
         }
 
         @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
                 transform: rotate(45deg) translateY(0);
             }
+
             40% {
                 transform: rotate(45deg) translateY(-10px);
             }
+
             60% {
                 transform: rotate(45deg) translateY(-5px);
             }
         }
+
         /* Background Lines and Particles */
         .background-effects {
             position: fixed;
@@ -610,10 +645,10 @@
             transform: translateX(-50%);
             width: 1px;
             height: 240px;
-            background: linear-gradient(to bottom, 
-                rgba(168, 85, 247, 0) 0%,
-                rgba(168, 85, 247, 0.3) 30%,
-                rgba(168, 85, 247, 0.6) 100%);
+            background: linear-gradient(to bottom,
+                    rgba(168, 85, 247, 0) 0%,
+                    rgba(168, 85, 247, 0.3) 30%,
+                    rgba(168, 85, 247, 0.6) 100%);
             border-radius: 0;
             filter: none;
             box-shadow: none;
@@ -628,10 +663,10 @@
             transform: translateX(-50%);
             width: 2px;
             height: 240px;
-            background: linear-gradient(to bottom, 
-                rgba(168, 85, 247, 0) 0%,
-                rgba(168, 85, 247, 0.2) 40%,
-                rgba(168, 85, 247, 0.4) 100%);
+            background: linear-gradient(to bottom,
+                    rgba(168, 85, 247, 0) 0%,
+                    rgba(168, 85, 247, 0.2) 40%,
+                    rgba(168, 85, 247, 0.4) 100%);
             border-radius: 0;
             filter: blur(0.5px);
             box-shadow: none;
@@ -642,12 +677,15 @@
                 transform: translateX(-50%) translateY(-20px);
                 opacity: 0;
             }
+
             5% {
                 opacity: 1;
             }
+
             95% {
                 opacity: 1;
             }
+
             100% {
                 transform: translateX(-50%) translateY(calc(100vh + 50px));
                 opacity: 0;
@@ -657,8 +695,270 @@
         .particle.animate {
             animation: fall linear infinite;
         }
+
+        /* Trading About Section Styles */
+        .trading-about * {
+            box-sizing: border-box;
+        }
+
+        .trading-about,
+        .trading-about p,
+        .trading-about div,
+        .trading-about span {
+            font-family: 'IBM Plex Sans', sans-serif;
+        }
+
+        .trading-about .trading-container {
+            max-width: 650px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .trading-about .eyebrow {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #888888;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+
+        .trading-about .trading-h2 {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 28px;
+            font-weight: 500;
+            margin: 0 0 32px 0;
+            color: #ffffff;
+            letter-spacing: normal;
+            text-align: left;
+        }
+
+        .trading-about .intro {
+            font-size: 15px;
+            font-weight: 300;
+            line-height: 1.7;
+            color: #888888;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .trading-about .intro strong {
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        .trading-about .divider {
+            width: 40px;
+            height: 1px;
+            background-color: #a855f7;
+            margin: 32px 0 48px;
+        }
+
+        .trading-about .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            padding: 0;
+        }
+
+        .trading-about .phase {
+            display: grid;
+            grid-template-columns: 120px 40px 1fr;
+        }
+
+        .trading-about .phase-label {
+            text-align: right;
+            padding-top: 1px;
+        }
+
+        .trading-about .phase-num {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #888888;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .trading-about .phase-name {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 13px;
+            font-weight: 500;
+            color: #ffffff;
+            display: block;
+        }
+
+        .trading-about .phase-dot-container {
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        .trading-about .phase-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background-color: #a855f7;
+            margin-top: 6px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .trading-about .phase.current .phase-dot {
+            width: 9px;
+            height: 9px;
+            background-color: #d8b4fe;
+            margin-top: 5px;
+            box-shadow: 0 0 0 4px var(--bg-primary);
+        }
+
+        .trading-about .phase:not(:last-child) .phase-dot-container::after {
+            content: '';
+            position: absolute;
+            top: 13px;
+            bottom: -34px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            background-color: #a855f7;
+            z-index: 1;
+        }
+
+        .trading-about .phase-content {
+            padding-top: 0;
+            text-align: left;
+        }
+
+        .trading-about .phase-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: #ffffff;
+            margin: 0 0 8px 0;
+            letter-spacing: normal;
+        }
+
+        .trading-about .phase-desc {
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.7;
+            color: #888888;
+            margin: 0 0 16px 0;
+        }
+
+        .trading-about .phase-desc em {
+            font-style: italic;
+        }
+
+        .trading-about .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .trading-about .tag {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 11px;
+            padding: 3px 10px;
+            border: 1px solid #333333;
+            color: #888888;
+            border-radius: 0;
+            background: transparent;
+        }
+
+        .trading-about .phase.current .tag {
+            border-color: #ffffff;
+            color: #ffffff;
+        }
+
+        .trading-about .quote-block {
+            border-left: 2px solid #a855f7;
+            padding: 16px 20px 16px 24px;
+            margin-top: 60px;
+            background-color: rgba(255, 255, 255, 0.02);
+            text-align: left;
+        }
+
+        .trading-about .quote-text {
+            font-family: 'IBM Plex Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 1.7;
+            color: #888888;
+            font-style: italic;
+            margin: 0;
+        }
+
+        .trading-about .quote-text strong {
+            font-style: normal;
+            font-weight: 500;
+            color: #ffffff;
+        }
+
+        @media (max-width: 600px) {
+            .trading-about .phase {
+                grid-template-columns: 24px 1fr;
+                grid-template-rows: auto auto;
+                gap: 16px 0;
+            }
+
+            .trading-about .phase-label {
+                text-align: left;
+                grid-column: 2;
+                grid-row: 1;
+                display: flex;
+                align-items: baseline;
+                gap: 12px;
+                padding-top: 0;
+            }
+
+            .trading-about .phase-num {
+                margin: 0;
+            }
+
+            .trading-about .phase-name {
+                display: inline-block;
+            }
+
+            .trading-about .phase-dot-container {
+                grid-column: 1;
+                grid-row: 1 / span 2;
+                justify-content: flex-start;
+                padding-top: 2px;
+            }
+
+            .trading-about .phase-content {
+                grid-column: 2;
+                grid-row: 2;
+            }
+
+            .trading-about .phase-dot {
+                margin-top: 0;
+            }
+
+            .trading-about .phase:not(:last-child) .phase-dot-container::after {
+                left: 3px;
+                transform: none;
+                top: 7px;
+                bottom: -24px;
+            }
+
+            .trading-about .phase.current .phase-dot {
+                margin-top: -1px;
+            }
+
+            .trading-about .divider {
+                margin: 24px 0 32px;
+            }
+
+            .trading-about .quote-block {
+                padding-left: 16px;
+            }
+        }
     </style>
 </head>
+
 <body>
     <!-- Background Effects -->
     <div class="background-effects" id="backgroundEffects">
@@ -667,13 +967,13 @@
         <div class="background-line line-3"></div>
     </div>
 
-    <!-- Loading Screen -->
-    <div id="loading-screen">
-        <div class="loading-container">
-            <div class="loading-bar-border">
-                <div class="loading-bar-fill" id="loadingBarFill"></div>
-            </div>
-            <div class="loading-text">Loading...</div>
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <div class="splash-container">
+            <div class="splash-label">TRADING PORTFOLIO</div>
+            <h1 class="splash-title">Welcome.</h1>
+            <p class="splash-subtitle">Order Flow &middot; ICT &middot; MSNR</p>
+            <button id="enter-btn" class="splash-btn">Click Here To View Portfolio</button>
         </div>
     </div>
 
@@ -687,6 +987,7 @@
                 <li><a href="#about" class="mobile-nav-link">About</a></li>
                 <li><a href="#skills" class="mobile-nav-link">Skills</a></li>
                 <li><a href="#projects" class="mobile-nav-link">Projects</a></li>
+                <li><a href="#contact" class="mobile-nav-link">Contact</a></li>
             </ul>
         </div>
     </nav>
@@ -697,6 +998,7 @@
             <li class="nav-item"><a href="#about" class="nav-link">About</a></li>
             <li class="nav-item"><a href="#skills" class="nav-link">Skills</a></li>
             <li class="nav-item"><a href="#projects" class="nav-link">Projects</a></li>
+            <li class="nav-item"><a href="#contact" class="nav-link">Contact</a></li>
         </ul>
     </nav>
 
@@ -707,7 +1009,7 @@
         <!-- Hero Section -->
         <section id="hero" class="section hero">
             <div>
-                <h1 class="hero-name">ANDY LIFTS</h1>
+                <h1 class="hero-name">ANDY.Funded</h1>
                 <div class="hero-role">
                     <span id="typingText"></span>
                     <span class="typing-cursor">|</span>
@@ -720,15 +1022,100 @@
         </section>
 
         <!-- About Section -->
-        <section id="about" class="section">
-            <div class="section-content">
-                <h2 class="section-title">About Me</h2>
-                <p class="section-text">
-                    I'm a passionate developer and problem solver who loves creating innovative solutions. With expertise in modern web technologies and a keen eye for design, I bring ideas to life through clean, efficient code. My journey in technology has been driven by curiosity and a relentless pursuit of excellence.
-                </p>
-                <p class="section-text">
-                    When I'm not coding, I explore new technologies, contribute to open-source projects, and constantly seek ways to push the boundaries of what's possible in the digital world.
-                </p>
+        <section id="about" class="section trading-about">
+            <div class="trading-container">
+                <div class="eyebrow">ABOUT ME</div>
+                <h2 class="trading-h2">Trading Style</h2>
+
+                <div class="intro">
+                    I didn't start as a trader who knew what he was doing. I began with almost <strong>zero
+                        understanding of the market</strong> — learning through journaling and using AI tools to analyze
+                    trades, refine thinking, and build discipline one step at a time.<br><br>
+                    This is the path that led me to where I am now.
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="timeline">
+                    <div class="phase">
+                        <div class="phase-label">
+                            <span class="phase-num">PHASE 01</span>
+                            <span class="phase-name">Foundation</span>
+                        </div>
+                        <div class="phase-dot-container">
+                            <div class="phase-dot"></div>
+                        </div>
+                        <div class="phase-content">
+                            <h3 class="phase-title">Journaling &amp; AI-Assisted Learning</h3>
+                            <p class="phase-desc">
+                                Built the habit of documenting every trade. Used ChatGPT to break down mistakes, spot
+                                patterns, and develop structured thinking before I had a real edge.
+                            </p>
+                            <div class="tags">
+                                <div class="tag">Trade journaling</div>
+                                <div class="tag">ChatGPT analysis</div>
+                                <div class="tag">Discipline</div>
+                                <div class="tag">Process-first</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="phase">
+                        <div class="phase-label">
+                            <span class="phase-num">PHASE 02</span>
+                            <span class="phase-name">Structure</span>
+                        </div>
+                        <div class="phase-dot-container">
+                            <div class="phase-dot"></div>
+                        </div>
+                        <div class="phase-content">
+                            <h3 class="phase-title">MSNR &amp; ICT Concepts</h3>
+                            <p class="phase-desc">
+                                Shifted to structured methodology. Focused on market structure, liquidity, and precision
+                                — learning to read price delivery the way institutions do.
+                            </p>
+                            <div class="tags">
+                                <div class="tag">MSNR</div>
+                                <div class="tag">ICT</div>
+                                <div class="tag">Liquidity</div>
+                                <div class="tag">Fair Value Gap</div>
+                                <div class="tag">Market Structure</div>
+                                <div class="tag">Kill Zones</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="phase current">
+                        <div class="phase-label">
+                            <span class="phase-num">CURRENT</span>
+                            <span class="phase-name">Execution</span>
+                        </div>
+                        <div class="phase-dot-container">
+                            <div class="phase-dot"></div>
+                        </div>
+                        <div class="phase-content">
+                            <h3 class="phase-title">Order Flow</h3>
+                            <p class="phase-desc">
+                                Integrated real-time order flow to see <em>inside</em> the candle. Fine-tuned entries by
+                                reading actual buying and selling pressure — not just structure, but intent.
+                            </p>
+                            <div class="tags">
+                                <div class="tag">Footprint Chart</div>
+                                <div class="tag">Delta</div>
+                                <div class="tag">CVD</div>
+                                <div class="tag">Absorption</div>
+                                <div class="tag">Imbalance</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quote-block">
+                    <p class="quote-text">
+                        My journey is built on <strong>continuous learning and adaptation</strong> — from not knowing
+                        how to trade at all, to developing a system that reflects my own style and edge in the market.
+                    </p>
+                </div>
             </div>
         </section>
 
@@ -738,31 +1125,48 @@
                 <h2 class="section-title">Skills</h2>
                 <div class="skills-grid">
                     <div class="skill-category">
-                        <h3>Frontend</h3>
+                        <h3>ANALYSIS</h3>
                         <ul class="skill-list">
-                            <li class="skill-item">HTML5</li>
-                            <li class="skill-item">CSS3</li>
-                            <li class="skill-item">JavaScript</li>
-                            <li class="skill-item">React</li>
-                            <li class="skill-item">Vue.js</li>
+                            <li class="skill-item">Market Structure</li>
+                            <li class="skill-item">Liquidity Concepts</li>
+                            <li class="skill-item">Fair Value Gap (FVG)</li>
+                            <li class="skill-item">Order Blocks</li>
+                            <li class="skill-item">Kill Zones</li>
+                            <li class="skill-item">Premium Discount</li>
                         </ul>
                     </div>
                     <div class="skill-category">
-                        <h3>Backend</h3>
+                        <h3>METHODOLOGY</h3>
                         <ul class="skill-list">
-                            <li class="skill-item">Node.js</li>
-                            <li class="skill-item">Python</li>
-                            <li class="skill-item">PHP</li>
-                            <li class="skill-item">Express</li>
+                            <li class="skill-item">MSNR</li>
+                            <li class="skill-item">ICT Concepts</li>
+                            <li class="skill-item">Candle Range theory</li>
+                            <li class="skill-item">Smart Money Concepts</li>
+                            <li class="skill-item">HTF/LTF Alignment</li>
+                            <li class="skill-item">PD Arrays</li>
+                            <li class="skill-item">Stack PD Arrays</li>
                         </ul>
                     </div>
                     <div class="skill-category">
-                        <h3>Tools</h3>
+                        <h3>EXECUTION</h3>
                         <ul class="skill-list">
-                            <li class="skill-item">Git</li>
-                            <li class="skill-item">Docker</li>
-                            <li class="skill-item">VS Code</li>
-                            <li class="skill-item">Figma</li>
+                            <li class="skill-item">Order Flow</li>
+                            <li class="skill-item">Footprint Chart</li>
+                            <li class="skill-item">Delta Analysis</li>
+                            <li class="skill-item">CVD</li>
+                            <li class="skill-item">Absorption &amp; Imbalance</li>
+                            <li class="skill-item">Reversal Point</li>
+                        </ul>
+                    </div>
+                    <div class="skill-category">
+                        <h3>TOOLS</h3>
+                        <ul class="skill-list">
+                            <li class="skill-item">TradingView</li>
+                            <li class="skill-item">AMP Quantower</li>
+                            <li class="skill-item">Trade Journal</li>
+                            <li class="skill-item">Claude / AI Analysis</li>
+                            <li class="skill-item">Risk Management</li>
+                            <li class="skill-item">Vol2Vol Analysis</li>
                         </ul>
                     </div>
                 </div>
@@ -775,60 +1179,114 @@
                 <h2 class="section-title">Projects</h2>
                 <div class="projects-grid">
                     <div class="project-card">
-                        <h3 class="project-name">Project One</h3>
+                        <h3 class="project-name">ICT/MSNR Playbook</h3>
                         <p class="project-description">
-                            A modern web application built with cutting-edge technologies, featuring real-time data processing and intuitive user interfaces.
+                            A structured documentation of my trading methodology built around ICT concepts and MSNR
+                            framework. Covers market structure, liquidity sweeps, and price delivery — compiled from
+                            months of screen time and journaling.
                         </p>
                         <div class="project-tech">
-                            <span class="tech-tag">React</span>
-                            <span class="tech-tag">Node.js</span>
-                            <span class="tech-tag">MongoDB</span>
+                            <span class="tech-tag">ICT</span>
+                            <span class="tech-tag">MSNR</span>
+                            <span class="tech-tag">Liquidity</span>
+                            <span class="tech-tag">Market Structure</span>
+                            <span class="tech-tag">TradingView</span>
                         </div>
                     </div>
                     <div class="project-card">
-                        <h3 class="project-name">Project Two</h3>
+                        <h3 class="project-name">Order Flow Study</h3>
                         <p class="project-description">
-                            An innovative solution for complex problems, streamlining workflows and enhancing productivity through smart automation.
+                            An ongoing study of real-time market mechanics using order flow tools. Focused on reading
+                            delta, absorption, and imbalance to understand actual buying and selling pressure inside
+                            each candle.
                         </p>
                         <div class="project-tech">
-                            <span class="tech-tag">Vue.js</span>
-                            <span class="tech-tag">Express</span>
-                            <span class="tech-tag">PostgreSQL</span>
-                        </div>
-                    </div>
-                    <div class="project-card">
-                        <h3 class="project-name">Project Three</h3>
-                        <p class="project-description">
-                            A beautiful and functional portfolio website showcasing modern design principles and smooth user interactions.
-                        </p>
-                        <div class="project-tech">
-                            <span class="tech-tag">HTML</span>
-                            <span class="tech-tag">CSS</span>
-                            <span class="tech-tag">JavaScript</span>
+                            <span class="tech-tag">Footprint</span>
+                            <span class="tech-tag">CVD</span>
+                            <span class="tech-tag">Delta</span>
+                            <span class="tech-tag">Quantower</span>
+                            <span class="tech-tag">AMP</span>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <div class="section-content">
+                <h2 class="section-title">Contact</h2>
+                <p class="section-text" style="font-size: 1rem; margin-bottom: 2.5rem;">Let's connect.</p>
+                <div class="projects-grid">
+                    <button id="discord-btn" class="project-card"
+                        style="text-align: left; cursor: pointer; display: flex; align-items: center; gap: 20px; outline: none; width: 100%; border: 1px solid #a855f7; font-family: 'Inter', sans-serif;">
+                        <div style="font-size: 28px; color: #ffffff; display: flex;">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.46-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.927 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.2rem; margin: 0 0 4px 0; color: #ffffff;">Discord</h3>
+                            <span id="discord-text"
+                                style="color: #888888; font-size: 0.95rem; font-family: 'IBM Plex Mono', monospace;">andy.funded</span>
+                        </div>
+                    </button>
+
+                    <a href="https://www.instagram.com/sunn_0ww/" target="_blank" class="project-card"
+                        style="text-decoration: none; cursor: pointer; display: flex; align-items: center; gap: 20px; outline: none; border: 1px solid #a855f7;">
+                        <div style="color: #ffffff; display: flex;">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.2rem; margin: 0 0 4px 0; color: #ffffff;">Instagram</h3>
+                            <span
+                                style="color: #888888; font-size: 0.95rem; font-family: 'IBM Plex Mono', monospace;">@sunn_0ww</span>
+                        </div>
+                    </a>
+
+                    <a href="https://www.tiktok.com/@k1ra.x6" target="_blank" class="project-card"
+                        style="text-decoration: none; cursor: pointer; display: flex; align-items: center; gap: 20px; outline: none; border: 1px solid #a855f7;">
+                        <div style="color: #ffffff; display: flex;">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M12.525.02A11.026 11.026 0 0 0 16.92 3.86v2.964c-1.397-.043-2.61-.531-3.6-1.353v9.426A5.4 5.4 0 1 1 5.952 9.94v2.102a3.3 3.3 0 1 0 3.048 3.305V.02h3.525z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 1.2rem; margin: 0 0 4px 0; color: #ffffff;">TikTok</h3>
+                            <span
+                                style="color: #888888; font-size: 0.95rem; font-family: 'IBM Plex Mono', monospace;">@k1ra.x6</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
 
     </main>
 
     <script>
         // Typing animation
-        const roles = ['A PROBLEM SOLVER', 'A DEVELOPER', 'CREATIVE', 'AN ENGINEER'];
+        const roles = ['I\'m a Trader.', 'I read Order Flow.', 'I trade with precision.', 'I follow smart money.', 'I let the market come to me.'];
         let currentRoleIndex = 0;
         let currentCharIndex = 0;
         let isDeleting = false;
         const typingElement = document.getElementById('typingText');
-        
+
         function typeEffect() {
             const currentRole = roles[currentRoleIndex];
-            
+
             if (isDeleting) {
                 typingElement.textContent = currentRole.substring(0, currentCharIndex - 1);
                 currentCharIndex--;
-                
+
                 if (currentCharIndex === 0) {
                     isDeleting = false;
                     currentRoleIndex = (currentRoleIndex + 1) % roles.length;
@@ -838,14 +1296,14 @@
             } else {
                 typingElement.textContent = currentRole.substring(0, currentCharIndex + 1);
                 currentCharIndex++;
-                
+
                 if (currentCharIndex === currentRole.length) {
                     isDeleting = true;
                     setTimeout(typeEffect, 2000);
                     return;
                 }
             }
-            
+
             setTimeout(typeEffect, isDeleting ? 50 : 100);
         }
 
@@ -853,16 +1311,16 @@
         function highlightNavigation() {
             const sections = document.querySelectorAll('.section');
             const navLinks = document.querySelectorAll('.nav-link');
-            
+
             let currentSection = '';
-            
+
             sections.forEach(section => {
                 const rect = section.getBoundingClientRect();
                 if (rect.top <= 100 && rect.bottom >= 100) {
                     currentSection = section.id;
                 }
             });
-            
+
             navLinks.forEach(link => {
                 link.classList.remove('active');
                 if (link.getAttribute('href').substring(1) === currentSection) {
@@ -877,7 +1335,7 @@
             const mobileNavToggle = document.getElementById('mobileNavToggle');
             const mobileNavMenu = document.getElementById('mobileNavMenu');
             const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
-            
+
             function checkMobile() {
                 if (window.innerWidth <= 768) {
                     mobileNav.style.display = 'flex';
@@ -885,17 +1343,17 @@
                     mobileNav.style.display = 'none';
                 }
             }
-            
+
             mobileNavToggle.addEventListener('click', () => {
                 mobileNavMenu.classList.toggle('active');
             });
-            
+
             mobileNavLinks.forEach(link => {
                 link.addEventListener('click', () => {
                     mobileNavMenu.classList.remove('active');
                 });
             });
-            
+
             window.addEventListener('resize', checkMobile);
             checkMobile();
         }
@@ -904,7 +1362,7 @@
         function handleScrollIndicator() {
             const scrollIndicator = document.querySelector('.scroll-indicator');
             const heroSection = document.getElementById('hero');
-            
+
             window.addEventListener('scroll', () => {
                 const heroRect = heroSection.getBoundingClientRect();
                 if (heroRect.bottom <= 0) {
@@ -917,17 +1375,20 @@
 
 
 
-        // Loading screen
-        function hideLoadingScreen() {
-            const loadingScreen = document.getElementById('loading-screen');
-            
-            // Wait for loading animation to complete, then fade out
-            setTimeout(() => {
-                loadingScreen.classList.add('fade-out');
+        // Splash screen function
+        function initSplashScreen() {
+            const splashScreen = document.getElementById('splash-screen');
+            const enterBtn = document.getElementById('enter-btn');
+
+            document.body.style.overflow = 'hidden';
+
+            enterBtn.addEventListener('click', () => {
+                splashScreen.classList.add('fade-out');
                 setTimeout(() => {
-                    loadingScreen.style.display = 'none';
-                }, 500);
-            }, 2800); // Slightly longer to let the bar animation complete
+                    splashScreen.style.display = 'none';
+                    document.body.style.overflow = '';
+                }, 600);
+            });
         }
 
         // Particle animation system
@@ -935,25 +1396,25 @@
             const backgroundEffects = document.getElementById('backgroundEffects');
             const linePositions = [25, 50, 75]; // 3 lines at 25%, 50%, 75%
             const animationDurations = [2.2, 2.5, 2.8]; // Fast, line-like movement
-            
+
             // Create exactly ONE particle per line (3 total)
             linePositions.forEach((position, index) => {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
-                
+
                 // Position particle exactly on the line - CSS transform handles centering
                 particle.style.left = position + '%';
-                
+
                 // Use smooth durations for consistent animation
                 const duration = animationDurations[index];
                 particle.style.animationDuration = duration + 's';
-                
+
                 // Stagger start times for natural effect
                 const delay = index * 1.2;
                 particle.style.animationDelay = delay + 's';
-                
+
                 backgroundEffects.appendChild(particle);
-                
+
                 // Start animation smoothly
                 setTimeout(() => {
                     particle.classList.add('animate');
@@ -961,20 +1422,41 @@
             });
         }
 
+        // Discord Copy Function
+        function initDiscordCopy() {
+            const discordBtn = document.getElementById('discord-btn');
+            const discordText = document.getElementById('discord-text');
+
+            if (discordBtn) {
+                discordBtn.addEventListener('click', () => {
+                    navigator.clipboard.writeText('andy.funded').then(() => {
+                        discordText.textContent = 'Copied!';
+                        discordText.style.color = '#a855f7';
+                        setTimeout(() => {
+                            discordText.textContent = 'andy.funded';
+                            discordText.style.color = '#888888';
+                        }, 2000);
+                    });
+                });
+            }
+        }
+
         // Initialize everything when page loads
         document.addEventListener('DOMContentLoaded', () => {
-            hideLoadingScreen();
+            initSplashScreen();
             setTimeout(() => {
                 typeEffect();
                 createParticles();
             }, 2000);
             initMobileNav();
             handleScrollIndicator();
+            initDiscordCopy();
 
-            
+
             window.addEventListener('scroll', highlightNavigation);
             highlightNavigation();
         });
     </script>
 </body>
+
 </html>
