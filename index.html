@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Andy.Funded — Trader</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0a0a0a;
+            --fg: #f0ece4;
+            --fg-dim: #9ca3af;
+            --fg-muted: #6b7280;
+            --accent: #a855f7;
+            --accent-dim: #8b5cf6;
+            --line: rgba(240, 236, 228, 0.08);
+            --line-strong: rgba(240, 236, 228, 0.15);
+            --card: rgba(240, 236, 228, 0.03);
+            --card-hover: rgba(168, 85, 247, 0.06);
+            --serif: 'Cormorant Garamond', serif;
+            --mono: 'DM Mono', monospace;
+            --sans: 'Syne', sans-serif;
+            --radius: 2px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: var(--sans);
+            font-size: 15px;
+            line-height: 1.6;
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* NOISE OVERLAY - REMOVED */
+
+        /* NAV */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.4rem 3rem;
+            border-bottom: 1px solid var(--line);
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .nav-logo {
+            font-family: var(--serif);
+            font-size: 1.5rem;
+            font-weight: 400;
+            letter-spacing: -0.02em;
+            color: var(--fg);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: var(--mono);
+            font-size: 0.72rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--fg-dim);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--fg);
+        }
+
+        /* HAMBURGER */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+            background: none;
+            border: none;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 1px;
+            background: var(--fg);
+            transition: all 0.3s;
+        }
+
+        /* MOBILE MENU */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: var(--bg);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2.5rem;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu a {
+            font-family: var(--serif);
+            font-size: 2.5rem;
+            color: var(--fg);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+            transition: color 0.2s;
+        }
+
+        .mobile-menu a:hover {
+            color: var(--accent);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1.4rem;
+            right: 3rem;
+            font-size: 1.5rem;
+            color: var(--fg-dim);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: var(--sans);
+        }
+
+        /* HERO */
+        #hero {
+            padding: 10rem 3rem 6rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            position: relative;
+            border-bottom: 1px solid var(--line);
+        }
+
+        /* SPLASH SCREEN */
+        #splash {
+            position: fixed;
+            inset: 0;
+            background: #0a0a0a;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .splash-label {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            color: var(--fg-muted);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+        }
+
+        .splash-title {
+            font-family: var(--serif);
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--fg);
+            margin-bottom: 1rem;
+            line-height: 1;
+        }
+
+        .splash-sub {
+            font-family: var(--sans);
+            font-size: 1rem;
+            color: var(--fg-dim);
+            margin-bottom: 3rem;
+        }
+
+        .splash-btn {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            padding: 1rem 2rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .splash-btn:hover {
+            background: rgba(168, 85, 247, 0.1);
+            box-shadow: inset 0 0 10px rgba(168, 85, 247, 0.2), 0 0 10px rgba(168, 85, 247, 0.2);
+        }
+
+        /* LOADING SCREEN */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 9998;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .loader-spinner {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--line-strong);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loader-bar-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--line);
+        }
+
+        .loader-bar {
+            height: 100%;
+            width: 0;
+            background: var(--accent);
+            transition: width 2.5s ease-in-out;
+        }
+
+        .loader-text {
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--fg-muted);
+            letter-spacing: 0.1em;
+        }
+
+
+
+        .hero-title {
+            position: relative;
+            z-index: 1;
+            font-family: var(--serif);
+            font-size: clamp(4rem, 10vw, 8rem);
+            font-weight: 300;
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+            color: var(--fg);
+        }
+
+        .hero-sub {
+            position: relative;
+            z-index: 1;
+            font-family: var(--sans);
+            font-size: 0.88rem;
+            color: var(--fg-dim);
+            max-width: 420px;
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+        }
+
+        .phrase-rotator {
+            position: relative;
+            height: 1.5rem;
+            color: var(--accent);
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .phrase-rotator span {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            animation: phraseFade 15s infinite;
+        }
+
+        .phrase-rotator span:nth-child(1) {
+            animation-delay: 0s;
+        }
+
+        .phrase-rotator span:nth-child(2) {
+            animation-delay: 3s;
+        }
+
+        .phrase-rotator span:nth-child(3) {
+            animation-delay: 6s;
+        }
+
+        .phrase-rotator span:nth-child(4) {
+            animation-delay: 9s;
+        }
+
+        .phrase-rotator span:nth-child(5) {
+            animation-delay: 12s;
+        }
+
+        @keyframes phraseFade {
+
+            0%,
+            20%,
+            100% {
+                opacity: 0;
+            }
+
+            2%,
+            18% {
+                opacity: 1;
+            }
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, var(--fg-muted), transparent);
+            animation: scrollAnim 2s ease-in-out infinite;
+        }
+
+        @keyframes scrollAnim {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scaleY(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scaleY(1.2);
+            }
+        }
+
+        /* SECTION SHARED */
+        section {
+            padding: 7rem 3rem;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .section-label {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            color: var(--fg-muted);
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            max-width: 80px;
+            height: 1px;
+            background: var(--fg-muted);
+        }
+
+        .section-title {
+            font-family: var(--serif);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            line-height: 1.05;
+            margin-bottom: 3rem;
+        }
+
+        .section-title span {
+            color: var(--accent);
+        }
+
+        /* ABOUT */
+        #about {
+            padding: 0;
+        }
+
+        .about-stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .about-stat-box {
+            padding: 3rem;
+            border-right: 1px solid var(--line);
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .about-stat-box:last-child {
+            border-right: none;
+        }
+
+        .stat-box-num {
+            font-family: var(--sans);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .stat-box-label {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            color: var(--fg-muted);
+            text-transform: uppercase;
+        }
+
+        .about-inner {
+            padding: 7rem 3rem;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 8rem;
+            align-items: start;
+        }
+
+        .about-left {
+            position: sticky;
+            top: 8rem;
+        }
+
+        .about-label-small {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-title {
+            font-family: var(--serif);
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 300;
+            line-height: 1.1;
+            margin-bottom: 2.5rem;
+            color: var(--fg);
+        }
+
+        .about-text p {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: var(--fg-dim);
+            margin-bottom: 1.2rem;
+        }
+
+        .about-text p strong {
+            color: var(--fg);
+            font-weight: 500;
+        }
+
+        /* TIMELINE */
+        .about-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 4.5rem;
+        }
+
+        .timeline-wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 4.5rem;
+            padding-left: 3rem;
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 0.5rem;
+            bottom: 0;
+            left: calc(0.5rem + 4px);
+            width: 1px;
+            background: linear-gradient(to bottom, var(--line-strong) 85%, transparent);
+        }
+
+        .phase {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -2.5rem;
+            top: 0.15rem;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            border: 1.5px solid var(--fg-muted);
+            background: var(--bg);
+            z-index: 2;
+        }
+
+        .phase.current .timeline-dot {
+            border-color: var(--accent);
+            background: var(--accent);
+            box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
+        }
+
+        .phase-meta {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            color: var(--fg-muted);
+            text-transform: uppercase;
+        }
+
+        .phase-title-accent {
+            color: var(--accent);
+        }
+
+        .phase-content h3 {
+            font-family: var(--sans);
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--fg);
+            margin-bottom: 0.75rem;
+        }
+
+        .phase-content p {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            color: var(--fg-dim);
+        }
+
+        .about-closing {
+            margin-top: 1rem;
+            padding: 2.5rem 3rem;
+            background: rgba(168, 85, 247, 0.03);
+            border: 1px solid var(--line);
+            border-left: 2px solid var(--accent);
+        }
+
+        .about-closing p {
+            font-family: var(--sans);
+            font-style: italic;
+            font-size: 1rem;
+            line-height: 1.8;
+            color: var(--fg-dim);
+        }
+
+        .about-closing strong {
+            color: var(--fg);
+            font-weight: 600;
+        }
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 0.5rem;
+        }
+
+        .tag {
+            font-family: var(--mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.1em;
+            color: var(--fg-muted);
+            border: 1px solid var(--line-strong);
+            padding: 0.3rem 0.6rem;
+            border-radius: var(--radius);
+            text-transform: uppercase;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .tag:hover,
+        .phase:hover .tag,
+        .skill-card:hover .tag,
+        .ebook-card:hover .tag {
+            color: var(--accent);
+            border-color: var(--accent-dim);
+        }
+
+        /* SKILLS */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1px;
+            background: var(--line);
+            border: 1px solid var(--line);
+        }
+
+        .skill-card {
+            background: var(--bg);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: background 0.25s, box-shadow 0.25s;
+            cursor: default;
+        }
+
+        .skill-card:hover {
+            background: var(--card-hover);
+            box-shadow: inset 0 0 0 1px var(--line-strong);
+        }
+
+        .skill-num {
+            font-family: var(--mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.15em;
+            color: var(--accent);
+        }
+
+        .skill-name {
+            font-family: var(--sans);
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--fg);
+            line-height: 1.3;
+        }
+
+        .skill-desc {
+            font-size: 0.82rem;
+            color: var(--fg-dim);
+            line-height: 1.7;
+            flex: 1;
+        }
+
+        /* EBOOK */
+        .ebook-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .ebook-card {
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            transition: border-color 0.25s, background 0.25s, transform 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ebook-card-img {
+            margin: -2rem -2rem 0 -2rem;
+            height: 180px;
+        }
+
+        .ebook-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .ebook-card:hover {
+            border-color: var(--accent-dim);
+            transform: translateY(-2px);
+        }
+
+        .ebook-badge {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-family: var(--mono);
+            font-size: 0.62rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 0.25rem 0.6rem;
+            border-radius: var(--radius);
+            background: rgba(168, 85, 247, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+        }
+
+        .ebook-title {
+            font-family: var(--sans);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--fg);
+            max-width: 70%;
+        }
+
+        .btn-download {
+            font-family: var(--mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--bg);
+            background: var(--fg);
+            padding: 0.85rem 1.8rem;
+            text-decoration: none;
+            border-radius: var(--radius);
+            transition: background 0.2s, color 0.2s;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .btn-download:hover {
+            background: var(--accent);
+        }
+
+        /* CONTACT */
+        #contact .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: start;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem 0;
+            border-top: 1px solid var(--line);
+            text-decoration: none;
+            color: var(--fg);
+            transition: color 0.2s;
+        }
+
+        .contact-link:last-child {
+            border-bottom: 1px solid var(--line);
+        }
+
+        .contact-link:hover {
+            color: var(--accent);
+        }
+
+        .contact-link-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .contact-link-platform {
+            font-family: var(--sans);
+            font-size: 0.9rem;
+            font-weight: 600;
+            width: 100px;
+        }
+
+        .contact-link-handle {
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            color: var(--fg-dim);
+            letter-spacing: 0.05em;
+        }
+
+        .contact-link-arrow {
+            font-size: 1rem;
+            color: var(--fg-muted);
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .contact-link:hover .contact-link-arrow {
+            transform: translate(3px, -3px);
+            color: var(--accent);
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 2rem 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-brand {
+            font-family: var(--serif);
+            font-size: 1.2rem;
+            color: var(--fg);
+        }
+
+        .footer-copy {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            color: var(--fg-muted);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            font-family: var(--mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.12em;
+            color: var(--fg-muted);
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--fg);
+        }
+
+        /* FADE IN ANIMATION */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            nav {
+                padding: 1.2rem 1.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            section {
+                padding: 5rem 1.5rem;
+            }
+
+            #hero {
+                padding: 8rem 1.5rem 4rem;
+            }
+
+
+
+            .about-stats-bar {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .about-stat-box {
+                border-bottom: 1px solid var(--line);
+            }
+
+            .about-stat-box:nth-child(even) {
+                border-right: none;
+            }
+
+            #about .about-grid,
+            #contact .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .hero-title {
+                font-size: 4.5rem;
+            }
+
+            footer {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+            #about .about-grid {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 3rem !important;
+            }
+
+            .about-left {
+                position: static !important;
+                width: 100% !important;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .about-stats-bar {
+                grid-template-columns: 1fr;
+            }
+
+            .about-stat-box {
+                border-right: none;
+            }
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .phase {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
+
+            .contact-link {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .contact-link-arrow {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- SPLASH SCREEN -->
+    <div id="splash">
+        <div class="splash-label">TRADING PORTFOLIO</div>
+        <div class="splash-title">Welcome.</div>
+        <div class="splash-sub">Order Flow · ICT · MSNR</div>
+        <button class="splash-btn" id="splashEnter">CLICK HERE TO VIEW PORTFOLIO</button>
+    </div>
+
+    <!-- LOADING SCREEN -->
+    <div id="loader">
+        <div class="loader-spinner"></div>
+        <div class="loader-bar-bg">
+            <div class="loader-bar" id="loaderBar"></div>
+        </div>
+        <div class="loader-text" id="loaderText">Analyzing the market...</div>
+    </div>
+
+    <!-- NAV -->
+    <nav>
+        <a href="#hero" class="nav-logo">Andy.Funded</a>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#ebook">Ebook</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger" aria-label="Open menu">
+            <span></span><span></span>
+        </button>
+    </nav>
+
+    <!-- MOBILE MENU -->
+    <div class="mobile-menu" id="mobileMenu">
+        <button class="close-btn" id="closeMenu">✕</button>
+        <a href="#about" onclick="closeMobileMenu()">About</a>
+        <a href="#skills" onclick="closeMobileMenu()">Skills</a>
+        <a href="#ebook" onclick="closeMobileMenu()">Ebook</a>
+        <a href="#contact" onclick="closeMobileMenu()">Contact</a>
+    </div>
+
+    <!-- HERO -->
+    <section id="hero">
+        <h1 class="hero-title">
+            <span class="fade-in" style="display: block; transition-delay: 0.1s;">Andy.Funded</span>
+            <span class="fade-in" style="display: block; transition-delay: 0.3s;">Trader.</span>
+        </h1>
+
+        <div class="hero-sub fade-in" style="transition-delay: 0.5s;">
+            <div class="phrase-rotator">
+                <span>Structure over signals.</span>
+                <span>The tape never lies.</span>
+                <span>Hunt the liquidity.</span>
+                <span>See inside the candle.</span>
+                <span>Trade the intent, not the price.</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+        <div class="about-stats-bar fade-in">
+            <div class="about-stat-box">
+                <span class="stat-box-num">Algo</span>
+                <span class="stat-box-label">SYSTEMATIC APPROACH</span>
+            </div>
+            <div class="about-stat-box">
+                <span class="stat-box-num">OF</span>
+                <span class="stat-box-label">ORDER FLOW TRADER</span>
+            </div>
+            <div class="about-stat-box">
+                <span class="stat-box-num">ICT</span>
+                <span class="stat-box-label">SMART MONEY CONCEPTS</span>
+            </div>
+            <div class="about-stat-box">
+                <span class="stat-box-num">AMP</span>
+                <span class="stat-box-label">POWERED BY QUANTOWER</span>
+            </div>
+        </div>
+
+        <div class="about-inner">
+            <div class="about-grid">
+                <div class="about-left fade-in">
+                    <div class="about-label-small">ABOUT ME</div>
+                    <h2 class="about-title">Trading<br>Style.</h2>
+                    <div class="about-text">
+                        <p>I didn't start as a trader who knew what he was doing. I began with almost zero understanding
+                            of the market — learning through journaling and using Claude to analyze trades, refine
+                            thinking, and build discipline one step at a time.</p>
+                        <p style="margin-top:2rem;">This is the path that led me to where I am now.</p>
+                    </div>
+                </div>
+
+                <div class="about-timeline">
+                    <div class="timeline-wrapper">
+                        <div class="timeline-line"></div>
+
+                        <div class="phase fade-in">
+                            <div class="timeline-dot"></div>
+                            <div class="phase-meta">
+                                PHASE 01 — <span class="phase-title-accent">FOUNDATION</span>
+                            </div>
+                            <div class="phase-content">
+                                <h3>Journaling & AI-Assisted Learning</h3>
+                                <p>I started with zero knowledge. Used Claude to break down every mistake, build
+                                    structure, and develop discipline before I had a real edge.</p>
+                                <div class="tags">
+                                    <span class="tag">Trade journaling</span>
+                                    <span class="tag">Claude</span>
+                                    <span class="tag">Discipline</span>
+                                    <span class="tag">Process-first</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="phase fade-in" style="transition-delay: 0.1s;">
+                            <div class="timeline-dot"></div>
+                            <div class="phase-meta">
+                                PHASE 02 — <span class="phase-title-accent">STRUCTURE</span>
+                            </div>
+                            <div class="phase-content">
+                                <h3>MSNR & ICT Concepts</h3>
+                                <p>Shifted to structured methodology. Focused on market structure, liquidity, and
+                                    precision — learning to read price delivery the way institutions do.</p>
+                                <div class="tags">
+                                    <span class="tag">MSNR</span>
+                                    <span class="tag">ICT</span>
+                                    <span class="tag">Liquidity</span>
+                                    <span class="tag">FVG</span>
+                                    <span class="tag">Market Structure</span>
+                                    <span class="tag">Kill Zones</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="phase fade-in current" style="transition-delay: 0.2s;">
+                            <div class="timeline-dot"></div>
+                            <div class="phase-meta">
+                                CURRENT — <span class="phase-title-accent">EXECUTION</span>
+                            </div>
+                            <div class="phase-content">
+                                <h3>Order Flow</h3>
+                                <p>Integrated real-time order flow to see inside the candle. Fine-tuned entries by
+                                    reading actual buying and selling pressure — not just structure, but intent.</p>
+                                <div class="tags">
+                                    <span class="tag">Footprint</span>
+                                    <span class="tag">CVD</span>
+                                    <span class="tag">Delta</span>
+                                    <span class="tag">Quantower</span>
+                                    <span class="tag">AMP</span>
+                                    <span class="tag">Absorption</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="about-closing fade-in" style="transition-delay: 0.3s;">
+                        <p>My journey is built on <strong>continuous learning and adaptation</strong> — from not knowing
+                            how to trade at all, to developing a system that reflects my own style and edge in the
+                            market.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+        <div class="section-label">Expertise</div>
+        <h2 class="section-title">Skills &<br><span>Knowledge.</span></h2>
+
+        <div class="skills-grid">
+            <div class="skill-card fade-in">
+                <span class="skill-num">01</span>
+                <div class="skill-name">ICT — Inner Circle Trader</div>
+                <div class="skill-desc">Smart money methodology focused on institutional order flow, liquidity, and
+                    precision price delivery.</div>
+                <div class="tags">
+                    <span class="tag">FVG</span><span class="tag">OB</span><span class="tag">Kill Zones</span><span
+                        class="tag">PD Arrays</span>
+                </div>
+            </div>
+            <div class="skill-card fade-in">
+                <span class="skill-num">02</span>
+                <div class="skill-name">CSMT — Candle Structure Movement Theory</div>
+                <div class="skill-desc">The theory of reading candle structure and movement by analyzing from the
+                    highest timeframe down to the smallest. CSMT evolved from PO3 — a technique I've used since I first
+                    started trading.</div>
+                <div class="tags">
+                    <span class="tag">PO3</span><span class="tag">HTF</span><span class="tag">LTF</span><span
+                        class="tag">Structure</span><span class="tag">Delivery</span>
+                </div>
+            </div>
+            <div class="skill-card fade-in">
+                <span class="skill-num">03</span>
+                <div class="skill-name">MSNR — Malaysia Support and Resistance</div>
+                <div class="skill-desc">A methodology focused on identifying key institutional support and resistance
+                    levels with precision entry and structural confirmation.</div>
+                <div class="tags">
+                    <span class="tag">Sponsorship</span><span class="tag">Rejection</span><span
+                        class="tag">Narrative</span>
+                </div>
+            </div>
+            <div class="skill-card fade-in">
+                <span class="skill-num">04</span>
+                <div class="skill-name">Order Flow</div>
+                <div class="skill-desc">Reading real-time buying and selling pressure inside each candle to understand
+                    true market intent.</div>
+                <div class="tags">
+                    <span class="tag">Footprint</span><span class="tag">Delta</span><span class="tag">CVD</span><span
+                        class="tag">Absorption</span><span class="tag">Imbalance</span>
+                </div>
+            </div>
+            <div class="skill-card fade-in">
+                <span class="skill-num">05</span>
+                <div class="skill-name">Candle Range Theory</div>
+                <div class="skill-desc">Interpreting candle bodies and wicks as delivery mechanisms that reveal
+                    institutional intent at key price levels.</div>
+                <div class="tags">
+                    <span class="tag">CRT</span><span class="tag">Wicks</span><span class="tag">Delivery</span><span
+                        class="tag">Range</span>
+                </div>
+            </div>
+            <div class="skill-card fade-in">
+                <span class="skill-num">06</span>
+                <div class="skill-name">Quarterly Theory</div>
+                <div class="skill-desc">Aligning trade direction with macro time-based cycles — quarterly, monthly,
+                    weekly, and daily delivery arrays.</div>
+                <div class="tags">
+                    <span class="tag">HTF</span><span class="tag">LTF</span><span class="tag">Time</span><span
+                        class="tag">Delivery</span>
+                </div>
+            </div>
+            <div class="skill-card fade-in">
+                <span class="skill-num">07</span>
+                <div class="skill-name">Psychology & Discipline</div>
+                <div class="skill-desc">Managing emotions, following the process, and staying consistent when the market
+                    tests your edge.</div>
+                <div class="tags">
+                    <span class="tag">Mindset</span><span class="tag">Journal</span><span
+                        class="tag">Process</span><span class="tag">Patience</span>
+                </div>
+            </div>
+            <div class="skill-card fade-in">
+                <span class="skill-num">08</span>
+                <div class="skill-name">Risk Management</div>
+                <div class="skill-desc">Protecting capital through disciplined position sizing, stop placement, and
+                    consistent risk-to-reward execution on every single trade.</div>
+                <div class="tags">
+                    <span class="tag">R:R</span><span class="tag">Position Sizing</span><span class="tag">Stop
+                        Loss</span><span class="tag">Drawdown</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EBOOK/RESOURCES -->
+    <section id="ebook">
+        <div class="section-label">Resources</div>
+        <h2 class="section-title">Free<br><span>Ebook.</span></h2>
+
+        <div class="ebook-grid">
+            <div class="ebook-card fade-in">
+                <div class="ebook-card-img">
+                    <img src="img/msnr.png" alt="ICT/MSNR Playbook">
+                </div>
+                <h3 class="ebook-title">ICT / MSNR Playbook</h3>
+                <div class="tags">
+                    <span class="tag">ICT</span>
+                    <span class="tag">MSNR</span>
+                    <span class="tag">Liquidity</span>
+                    <span class="tag">Market Structure</span>
+                    <span class="tag">TradingView</span>
+                </div>
+                <a href="https://drive.google.com/drive/folders/1nCLQyQPE1qkomTjvMHe77Zbvh9Niy3li?usp=drive_link"
+                    target="_blank" class="btn-download">Download Free eBook</a>
+            </div>
+
+            <div class="ebook-card fade-in" style="transition-delay:0.1s">
+                <span class="ebook-badge">Coming Soon</span>
+                <div class="ebook-card-img">
+                    <img src="img/orderflow.jpg" alt="Order Flow Study">
+                </div>
+                <h3 class="ebook-title">Order Flow Study</h3>
+                <div class="tags">
+                    <span class="tag">Footprint</span>
+                    <span class="tag">CVD</span>
+                    <span class="tag">Delta</span>
+                    <span class="tag">Quantower</span>
+                    <span class="tag">AMP</span>
+                </div>
+                <div class="btn-download" style="background:var(--line);color:var(--fg-dim);cursor:not-allowed">Pending
+                    Release</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+        <div class="section-label">Contact</div>
+        <div class="contact-grid">
+            <div>
+                <h2 class="section-title" style="margin-bottom: 1.5rem;">Let's<br><span>connect.</span></h2>
+                <p class="fade-in"
+                    style="font-family: var(--sans); color: var(--fg-dim); font-size: 0.95rem; line-height: 1.7; max-width: 380px;">
+                    Want to build yourself into a true trader?<br>Join our community — let's grow together.</p>
+            </div>
+            <div class="contact-links fade-in">
+                <div class="contact-link" id="discordLink" style="cursor: pointer;">
+                    <div class="contact-link-left">
+                        <span class="contact-link-platform">Discord</span>
+                        <span class="contact-link-handle">andy.funded</span>
+                    </div>
+                    <span id="discordCopied"
+                        style="font-family: var(--mono); font-size: 0.7rem; color: var(--accent); opacity: 0; transition: opacity 0.3s ease;">Copied!</span>
+                </div>
+                <a href="https://www.instagram.com/sunn_0ww/" class="contact-link" target="_blank">
+                    <div class="contact-link-left">
+                        <span class="contact-link-platform">Instagram</span>
+                        <span class="contact-link-handle">@sunn_0ww</span>
+                    </div>
+                </a>
+                <a href="https://www.tiktok.com/@k1ra.x6" class="contact-link" target="_blank">
+                    <div class="contact-link-left">
+                        <span class="contact-link-platform">TikTok</span>
+                        <span class="contact-link-handle">@k1ra.x6</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-brand">Andy.Funded</div>
+        <ul class="footer-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#ebook">Ebook</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <span class="footer-copy">© Andy.Funded</span>
+    </footer>
+
+    <script>
+        // Splash & Loader Logic
+        const splash = document.getElementById('splash');
+        const loader = document.getElementById('loader');
+        const splashEnter = document.getElementById('splashEnter');
+        const loaderBar = document.getElementById('loaderBar');
+        const loaderText = document.getElementById('loaderText');
+        const siteContent = document.querySelectorAll('nav, section, footer');
+
+        if (!sessionStorage.getItem('splashSeen')) {
+            document.body.style.overflow = 'hidden';
+            siteContent.forEach(el => el.style.display = 'none');
+
+            splashEnter.addEventListener('click', () => {
+                splash.style.display = 'none';
+                loader.style.display = 'flex';
+                loader.style.opacity = '1';
+
+                setTimeout(() => {
+                    loaderBar.style.width = '100%';
+                    setTimeout(() => loaderText.textContent = 'Reading the tape...', 800);
+                    setTimeout(() => loaderText.textContent = 'Loading your edge...', 1600);
+
+                    setTimeout(() => {
+                        loader.style.opacity = '0';
+                        setTimeout(() => {
+                            loader.style.display = 'none';
+                            siteContent.forEach(el => {
+                                el.style.display = '';
+                                el.style.opacity = '0';
+                                // trigger reflow
+                                void el.offsetWidth;
+                                el.style.transition = 'opacity 0.6s ease';
+                                el.style.opacity = '1';
+                            });
+                            document.body.style.overflow = '';
+                            sessionStorage.setItem('splashSeen', 'true');
+                            setTimeout(() => {
+                                document.querySelectorAll('#hero .fade-in').forEach(el => el.classList.add('visible'));
+                            }, 100);
+                        }, 500);
+                    }, 2500);
+                }, 50);
+            });
+        } else {
+            splash.style.display = 'none';
+            loader.style.display = 'none';
+            siteContent.forEach(el => el.style.display = '');
+        }
+
+        // Discord Copy
+        const discordLink = document.getElementById('discordLink');
+        const discordCopied = document.getElementById('discordCopied');
+        if (discordLink) {
+            discordLink.addEventListener('click', () => {
+                navigator.clipboard.writeText('andy.funded').then(() => {
+                    discordCopied.style.opacity = '1';
+                    setTimeout(() => {
+                        discordCopied.style.opacity = '0';
+                    }, 1500);
+                });
+            });
+        }
+
+        // Mobile Menu
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const closeMenu = document.getElementById('closeMenu');
+
+        if (hamburger && mobileMenu) {
+            hamburger.addEventListener('click', () => mobileMenu.classList.add('open'));
+            closeMenu.addEventListener('click', () => mobileMenu.classList.remove('open'));
+        }
+
+        window.closeMobileMenu = () => {
+            if (mobileMenu) mobileMenu.classList.remove('open');
+        };
+
+        // Safe Intersection Observer for scroll fade-ins
+        if (typeof IntersectionObserver !== 'undefined') {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    if (e.isIntersecting) {
+                        e.target.classList.add('visible');
+                        observer.unobserve(e.target);
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+            // Quick visible for items in viewport on load
+            setTimeout(() => {
+                if (sessionStorage.getItem('splashSeen')) {
+                    document.querySelectorAll('#hero .fade-in').forEach(el => el.classList.add('visible'));
+                }
+            }, 100);
+        } else {
+            // Fallback if IntersectionObserver is not supported
+            document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+        }
+    </script>
+</body>
+
+</html>
