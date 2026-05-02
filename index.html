@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LiamX — AMT</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --gold:       #a855f7;
+      --gold-light: #c084fc;
+      --gold-dim:   #8b5cf6;
+      --gold-pale:  rgba(168,85,247,0.08);
+      --bg:         #0a0a0a;
+      --bg2:        #111111;
+      --surface:    #171717;
+      --border:     rgba(240,236,228,0.08);
+      --border2:    rgba(240,236,228,0.15);
+      --text:       #f0ece4;
+      --muted:      #9ca3af;
+      --muted2:     #6b7280;
+      --dot-color:  rgba(168,85,247,0.12);
+    }
+
+    html.light {
+      --gold:       #8b5cf6;
+      --gold-light: #a855f7;
+      --gold-dim:   #7c3aed;
+      --gold-pale:  rgba(139,92,246,0.07);
+      --bg:         #f0ece4;
+      --bg2:        #e5e1d8;
+      --surface:    #ffffff;
+      --border:     rgba(139,92,246,0.18);
+      --border2:    rgba(0,0,0,0.07);
+      --text:       #111827;
+      --muted:      #6b7280;
+      --muted2:     #4b5563;
+      --dot-color:  rgba(139,92,246,0.1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    ::selection {
+      background: var(--gold);
+      color: var(--bg);
+    }
+
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dim); }
+
+    /* dot grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
+      background-size: 36px 36px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Noise overlay ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    section, nav, footer { position: relative; z-index: 1; }
+
+    /* ── SPLASH SCREEN ── */
+    #splash {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.5s ease;
+    }
+
+    .splash-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+
+    .splash-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 4rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1rem;
+      line-height: 1;
+    }
+
+    .splash-sub {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 3rem;
+    }
+
+    .splash-btn {
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      padding: 1rem 2rem;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .splash-btn:hover {
+      background: var(--gold-pale);
+      box-shadow: inset 0 0 10px rgba(168, 85, 247, 0.2), 0 0 10px rgba(168, 85, 247, 0.2);
+    }
+
+    /* ── LOADING SCREEN ── */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 9998;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.5s ease;
+    }
+
+    .loader-spinner {
+      width: 40px;
+      height: 40px;
+      border: 2px solid var(--border2);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 1.5rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loader-bar-bg {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: var(--border);
+    }
+
+    .loader-bar {
+      height: 100%;
+      width: 0;
+      background: var(--gold);
+      transition: width 2.5s ease-in-out;
+    }
+
+    .loader-text {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.8rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── NAVBAR ───────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(10,10,10,0.85);
+      backdrop-filter: blur(16px);
+      transition: background 0.3s ease, border-color 0.3s ease;
+    }
+    html.light nav {
+      background: rgba(240,236,228,0.85);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .nav-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-center a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-center a:hover { color: var(--text); }
+
+    .nav-right {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    .nav-burger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .nav-burger span { display: block; width: 22px; height: 1.5px; background: var(--gold); }
+
+    /* ── HERO ─────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      padding-top: 70px;
+    }
+
+    .hero-main {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 40px 40px;
+      overflow: hidden;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .hero-eyebrow-line {
+      width: 40px;
+      height: 1px;
+      background: var(--gold-dim);
+    }
+
+    .hero-eyebrow-text {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .hero-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(5rem, 13vw, 10rem);
+      font-weight: 300;
+      letter-spacing: -0.04em;
+      line-height: 0.9;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .hero-name-accent {
+      display: block;
+      color: var(--text);
+    }
+
+    .hero-row {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 40px;
+      margin-top: 20px;
+    }
+
+    .hero-desc {
+      max-width: 420px;
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: var(--muted2);
+      font-weight: 400;
+    }
+
+    .phrase-rotator {
+      position: relative;
+      height: 1.5rem;
+      color: var(--gold);
+      font-weight: 600;
+      margin-top: 1rem;
+      font-size: 1rem;
+    }
+
+    .phrase-rotator span {
+      position: absolute;
+      top: 0; left: 0;
+      opacity: 0;
+      animation: phraseFade 15s infinite;
+      white-space: nowrap;
+    }
+
+    .phrase-rotator span:nth-child(1) { animation-delay: 0s; }
+    .phrase-rotator span:nth-child(2) { animation-delay: 3s; }
+    .phrase-rotator span:nth-child(3) { animation-delay: 6s; }
+    .phrase-rotator span:nth-child(4) { animation-delay: 9s; }
+    .phrase-rotator span:nth-child(5) { animation-delay: 12s; }
+
+    @keyframes phraseFade {
+      0%, 20%, 100% { opacity: 0; }
+      2%, 18% { opacity: 1; }
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 28px;
+      background: var(--gold);
+      color: #0a0a0a;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted2);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .btn-ghost:hover { color: var(--text); }
+    .btn-ghost::after { content: '→'; }
+
+    /* hero bottom bar */
+    .hero-bar {
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .hero-bar-item {
+      padding: 24px 40px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .hero-bar-item:last-child { border-right: none; }
+
+    .hbi-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: -0.02em;
+    }
+
+    .hbi-key {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── SECTION BASE ─────────────────────────── */
+    .container {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 40px;
+    }
+
+    .sec-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .sec-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 4vw, 3.5rem);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    /* ── TRADING STYLE ────────────────────────── */
+    #about {
+      padding: 120px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .about-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 80px;
+    }
+
+    .about-left { padding-top: 4px; position: sticky; top: 100px; }
+
+    .about-intro {
+      font-size: 0.92rem;
+      line-height: 1.8;
+      color: var(--muted2);
+      margin-top: 24px;
+    }
+
+    .about-intro strong { color: var(--text); }
+
+    /* Timeline */
+    .timeline { position: relative; }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 12px; bottom: 12px;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--gold-dim) 15%, var(--gold-dim) 85%, transparent);
+    }
+
+    .tl-item {
+      padding-left: 32px;
+      padding-bottom: 52px;
+      position: relative;
+    }
+
+    .tl-item:last-child { padding-bottom: 0; }
+
+    .tl-dot {
+      position: absolute;
+      left: -4px;
+      top: 8px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 1.5px solid var(--gold-dim);
+    }
+
+    .tl-item.current .tl-dot {
+      background: var(--gold);
+      border-color: var(--gold);
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.6);
+    }
+
+    .tl-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .tl-phase {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .tl-phase-name {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .tl-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .tl-desc {
+      font-size: 0.85rem;
+      line-height: 1.75;
+      color: var(--muted2);
+      margin-bottom: 14px;
+    }
+
+    .tl-desc em { font-style: italic; color: var(--gold-light); }
+
+    .tl-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tl-tag {
+      font-family: 'DM Mono', monospace;
+      padding: 3px 10px;
+      border: 1px solid var(--border);
+      font-size: 0.64rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      border-radius: 1px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    
+    .tl-tag:hover {
+      color: var(--gold);
+      border-color: var(--gold-dim);
+    }
+
+    .about-quote {
+      margin-top: 56px;
+      padding: 24px 28px;
+      border-left: 2px solid var(--gold-dim);
+      background: var(--gold-pale);
+    }
+
+    .about-quote p {
+      font-size: 0.88rem;
+      line-height: 1.8;
+      color: var(--muted2);
+      font-style: italic;
+    }
+
+    .about-quote strong { color: var(--text); font-style: normal; }
+
+    /* ── SKILLS ───────────────────────────────── */
+    #skills {
+      padding: 120px 0;
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .skills-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 56px;
+    }
+
+    .skills-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .skill-row {
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      align-items: start;
+      gap: 24px;
+      padding: 28px 0;
+      border-bottom: 1px solid var(--border2);
+      transition: background 0.2s;
+      cursor: default;
+    }
+
+    .skill-row:first-child { border-top: 1px solid var(--border2); }
+
+    .skill-row:hover { background: var(--gold-pale); margin: 0 -40px; padding-left: 40px; padding-right: 40px; }
+
+    .skill-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--muted);
+      padding-top: 3px;
+    }
+
+    .skill-body { }
+
+    .skill-name {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+
+    .skill-desc {
+      font-size: 0.82rem;
+      line-height: 1.65;
+      color: var(--muted2);
+      max-width: 600px;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      justify-content: flex-end;
+      max-width: 250px;
+    }
+
+    .skill-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      padding: 2px 8px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 1px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    
+    .skill-row:hover .skill-tag {
+        color: var(--gold);
+        border-color: var(--gold-dim);
+    }
+
+    /* ── EBOOK ───────────────────────────────── */
+    #ebook {
+      padding: 120px 0;
+    }
+
+    .ebook-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 40px;
+      margin-top: 56px;
+    }
+
+    .ebook-card {
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      background: var(--bg2);
+      transition: border-color 0.25s, transform 0.25s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ebook-card-img {
+      margin: -32px -32px 0 -32px;
+      height: 200px;
+    }
+
+    .ebook-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(20%);
+    }
+
+    .ebook-card:hover {
+      border-color: var(--gold-dim);
+      transform: translateY(-2px);
+    }
+
+    .ebook-badge {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 2px;
+      background: rgba(168, 85, 247, 0.1);
+      color: var(--gold);
+      border: 1px solid rgba(168, 85, 247, 0.2);
+    }
+
+    .ebook-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      max-width: 80%;
+      line-height: 1.3;
+    }
+
+    .btn-download {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #0a0a0a;
+      background: var(--text);
+      padding: 12px 24px;
+      text-decoration: none;
+      border-radius: 2px;
+      transition: background 0.2s, color 0.2s;
+      text-align: center;
+      margin-top: auto;
+      font-weight: 600;
+    }
+
+    .btn-download:hover {
+      background: var(--gold);
+    }
+
+    /* ── CONTACT ──────────────────────────────── */
+    #contact {
+      padding: 120px 0;
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+    }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .contact-left .sec-title { font-size: clamp(2rem, 5vw, 3.5rem); }
+
+    .contact-left p {
+      margin-top: 20px;
+      font-size: 0.92rem;
+      line-height: 1.8;
+      color: var(--muted2);
+    }
+
+    .contact-right {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      text-decoration: none;
+      transition: border-color 0.25s, background 0.25s;
+      cursor: pointer;
+    }
+
+    .contact-link:hover {
+      border-color: var(--gold-dim);
+      background: var(--gold-pale);
+    }
+
+    .contact-link-label {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .contact-link-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .contact-link-sub {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .contact-link-arrow {
+      color: var(--muted);
+      font-size: 0.8rem;
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .contact-link:hover .contact-link-arrow { 
+        color: var(--gold); 
+        transform: translate(3px, -3px);
+    }
+
+    #discordCopied {
+        font-family: 'DM Mono', monospace;
+        font-size: 0.7rem;
+        color: var(--gold);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    /* ── FOOTER ───────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 1;
+      background: var(--bg);
+    }
+
+    .footer-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .footer-copy {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--text); }
+
+    /* ── Responsive ───────────────────────────── */
+    @media (max-width: 1200px) {
+      .nav-right { display: none; }
+      .nav-center { gap: 20px; }
+    }
+
+    @media (max-width: 900px) {
+      nav { padding: 0 20px; }
+      .nav-center { display: none; }
+      .nav-burger { display: flex; }
+      .nav-right { display: none; }
+      .hero-main { padding: 60px 20px 30px; }
+      .hero-row { flex-direction: column; align-items: flex-start; }
+      .hero-actions { align-items: flex-start; }
+      .hero-bar { grid-template-columns: repeat(2,1fr); }
+      .hero-bar-item:nth-child(2) { border-right: none; }
+      .about-layout { grid-template-columns: 1fr; gap: 40px; }
+      .about-left { position: static; }
+      .skills-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .skill-row { grid-template-columns: 32px 1fr; }
+      .skill-tags { display: none; }
+      .ebook-grid { grid-template-columns: 1fr; }
+      .contact-layout { grid-template-columns: 1fr; gap: 40px; }
+      .container { padding: 0 20px; }
+      footer { padding: 20px; flex-direction: column; gap: 12px; text-align: center; }
+      .footer-links { display: none; }
+    }
+
+    /* ── Mobile nav ───────────────────────────── */
+    .nav-mobile {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,10,10,0.98);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+    }
+
+    html.light .nav-mobile {
+        background: rgba(240,236,228,0.98);
+    }
+
+    .nav-mobile.open { display: flex; }
+
+    .nav-mobile a {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      font-weight: 400;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+      transition: color 0.2s;
+    }
+
+    .nav-mobile a:hover { color: var(--gold); }
+
+    .nav-close {
+      position: absolute;
+      top: 20px; right: 24px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    /* ── Theme toggle ─────────────────────────── */
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--muted2);
+      letter-spacing: 0.08em;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .theme-toggle:hover { border-color: var(--gold); color: var(--gold); }
+    .theme-toggle svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+    /* transition for smooth mode switch */
+    body, nav {
+      transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    /* ── Fade animation ───────────────────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+
+    .fade-up.visible { opacity: 1; transform: none; }
+  </style>
+</head>
+<body>
+
+  <!-- SPLASH SCREEN -->
+  <div id="splash">
+    <div class="splash-label">TRADING PORTFOLIO</div>
+    <div class="splash-title">Welcome.</div>
+    <div class="splash-sub">Order Flow · AMT · Understand Market</div>
+    <button class="splash-btn" id="splashEnter">CLICK HERE TO VIEW PORTFOLIO</button>
+  </div>
+
+  <!-- LOADING SCREEN -->
+  <div id="loader">
+    <div class="loader-spinner"></div>
+    <div class="loader-bar-bg">
+      <div class="loader-bar" id="loaderBar"></div>
+    </div>
+    <div class="loader-text" id="loaderText">Analyzing the market...</div>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="#hero">LiamX.AMT</a>
+    <ul class="nav-center">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#ebook">Ebook</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+        <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <span id="themeLabel">LIGHT</span>
+      </button>
+      <button class="nav-burger" onclick="openMobile()"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <div class="nav-mobile" id="mobileNav">
+    <button class="nav-close" onclick="closeMobile()">✕</button>
+    <a href="#about" onclick="closeMobile()">About</a>
+    <a href="#skills" onclick="closeMobile()">Skills</a>
+    <a href="#ebook" onclick="closeMobile()">Ebook</a>
+    <a href="#contact" onclick="closeMobile()">Contact</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero-main">
+      <div class="hero-eyebrow fade-up">
+        <span class="hero-eyebrow-line"></span>
+        <span class="hero-eyebrow-text">Order Flow · AMT</span>
+      </div>
+      
+      <h1 class="hero-name fade-up">
+        <span class="hero-name-accent">LiamX</span>
+      </h1>
+      <div class="hero-row fade-up">
+        <div class="hero-desc">
+          <div class="phrase-rotator">
+              <span>Structure over signals.</span>
+              <span>The tape never lies.</span>
+              <span>Hunt the liquidity.</span>
+              <span>See inside the candle.</span>
+              <span>Trade the intent, not the price.</span>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <a href="#about" class="btn-primary">View Portfolio</a>
+          <a href="#contact" class="btn-ghost">Get in touch</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-bar">
+      <div class="hero-bar-item fade-up">
+        <span class="hbi-val">ALGO</span>
+        <span class="hbi-key">Systematic Approach</span>
+      </div>
+      <div class="hero-bar-item fade-up">
+        <span class="hbi-val">OF</span>
+        <span class="hbi-key">Order Flow Trader</span>
+      </div>
+      <div class="hero-bar-item fade-up">
+        <span class="hbi-val">AMT</span>
+        <span class="hbi-key">Auction Market Theory</span>
+      </div>
+      <div class="hero-bar-item fade-up">
+        <span class="hbi-val">MTW</span>
+        <span class="hbi-key">Trade Motivewave</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRADING STYLE -->
+  <section id="about">
+    <div class="container">
+      <div class="about-layout">
+
+        <div class="about-left fade-up">
+          <span class="sec-label">About Me</span>
+          <h2 class="sec-title">Trading<br/>Style.</h2>
+          <p class="about-intro">
+            I didn't start as a trader who knew what he was doing. I began with almost zero understanding
+            of the market learning through journaling and using Claude to analyze trades, refine
+            thinking, and build discipline one step at a time.
+            <br/><br/>
+            This is the path that led me to where I am now.
+          </p>
+        </div>
+
+        <div>
+          <div class="timeline">
+
+            <div class="tl-item fade-up">
+              <div class="tl-dot"></div>
+              <div class="tl-meta">
+                <span class="tl-phase">Phase 01 —</span>
+                <span class="tl-phase-name">Foundation</span>
+              </div>
+              <div class="tl-title">Journaling &amp; AI-Assisted Learning</div>
+              <div class="tl-desc">
+                I started with zero knowledge. Used Claude to break down every mistake, build
+                structure, and develop discipline before I had a real edge.
+              </div>
+              <div class="tl-tags">
+                <span class="tl-tag">Trade journaling</span>
+                <span class="tl-tag">Claude</span>
+                <span class="tl-tag">Discipline</span>
+                <span class="tl-tag">Process-first</span>
+              </div>
+            </div>
+
+            <div class="tl-item fade-up">
+              <div class="tl-dot"></div>
+              <div class="tl-meta">
+                <span class="tl-phase">Phase 02 —</span>
+                <span class="tl-phase-name">Structure</span>
+              </div>
+              <div class="tl-title">ICT - MSNR</div>
+              <div class="tl-desc">
+                Shifted to structured methodology. Focused on market structure, liquidity, and
+                precision learning to read price delivery the way institutions do.
+              </div>
+              <div class="tl-tags">
+                <span class="tl-tag">Liquidity Sweep</span>
+                <span class="tl-tag">Order Blocks</span>
+                <span class="tl-tag">PD Array</span>
+                <span class="tl-tag">Models</span>
+              </div>
+            </div>
+
+            <div class="tl-item current fade-up">
+              <div class="tl-dot"></div>
+              <div class="tl-meta">
+                <span class="tl-phase">Current —</span>
+                <span class="tl-phase-name">Execution</span>
+              </div>
+              <div class="tl-title">Order Flow</div>
+              <div class="tl-desc">
+                Integrated real-time order flow to see inside the candle. Fine tuned entries by
+                reading actual buying and selling pressure not just structure, but intent.
+              </div>
+              <div class="tl-tags">
+                <span class="tl-tag">Auction Market Theory</span>
+                <span class="tl-tag">Volume Profiles</span>
+                <span class="tl-tag">Time And Price</span>
+                <span class="tl-tag">Motivewave</span>
+                <span class="tl-tag">Absorption</span>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="about-quote fade-up">
+            <p>
+              My journey’s been all about learning and figuring things out as I go starting from knowing
+              nothing about trading to building a system that actually fits my style and how I see the market.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="container">
+      <div class="skills-header fade-up">
+        <div>
+          <span class="sec-label">Expertise</span>
+          <h2 class="sec-title">Skills &amp; Knowledge.</h2>
+        </div>
+        <span class="skills-count">05 areas</span>
+      </div>
+
+      <div class="skills-list">
+        <div class="skill-row fade-up">
+          <span class="skill-num">01</span>
+          <div class="skill-body">
+            <div class="skill-name">ICT &amp; MSNR</div>
+            <div class="skill-desc">Smart money methodology focused on institutional liquidity, and precision price delivery.</div>
+          </div>
+          <div class="skill-tags">
+            <span class="skill-tag">FVG</span><span class="skill-tag">OB</span><span class="skill-tag">Kill Zones</span><span class="skill-tag">PD Arrays</span>
+          </div>
+        </div>
+
+        <div class="skill-row fade-up">
+          <span class="skill-num">02</span>
+          <div class="skill-body">
+            <div class="skill-name">Quarterly Theory</div>
+            <div class="skill-desc">Aligning trade direction with macro time-based cycles quarterly, monthly, weekly, and daily delivery arrays.</div>
+          </div>
+          <div class="skill-tags">
+            <span class="skill-tag">HTF</span><span class="skill-tag">LTF</span><span class="skill-tag">Time</span><span class="skill-tag">Delivery</span>
+          </div>
+        </div>
+
+        <div class="skill-row fade-up">
+          <span class="skill-num">03</span>
+          <div class="skill-body">
+            <div class="skill-name">Order Flow</div>
+            <div class="skill-desc">Reading real-time buying and selling pressure inside each candle to understand true market intent.</div>
+          </div>
+          <div class="skill-tags">
+            <span class="skill-tag">Footprint</span><span class="skill-tag">Delta</span><span class="skill-tag">CVD</span><span class="skill-tag">Absorption</span>
+          </div>
+        </div>
+
+        <div class="skill-row fade-up">
+          <span class="skill-num">04</span>
+          <div class="skill-body">
+            <div class="skill-name">Psychology &amp; Discipline</div>
+            <div class="skill-desc">Managing emotions, following the process, and staying consistent when the market tests your edge.</div>
+          </div>
+          <div class="skill-tags">
+            <span class="skill-tag">Mindset</span><span class="skill-tag">Journal</span><span class="skill-tag">Process</span><span class="skill-tag">Patience</span>
+          </div>
+        </div>
+
+        <div class="skill-row fade-up">
+          <span class="skill-num">05</span>
+          <div class="skill-body">
+            <div class="skill-name">Risk Management</div>
+            <div class="skill-desc">Protecting capital through disciplined position sizing, stop placement, and consistent risk-to-reward execution.</div>
+          </div>
+          <div class="skill-tags">
+            <span class="skill-tag">R:R</span><span class="skill-tag">Position Sizing</span><span class="skill-tag">Drawdown</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EBOOK -->
+  <section id="ebook">
+    <div class="container">
+      <div class="firms-header fade-up">
+        <div>
+          <span class="sec-label">Resources</span>
+          <h2 class="sec-title">Free Ebook.</h2>
+        </div>
+      </div>
+
+      <div class="ebook-grid fade-up">
+        
+        <div class="ebook-card">
+          <div class="ebook-card-img">
+            <img src="img/msnr.png" alt="ICT/MSNR Playbook" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22200%22%20viewBox%3D%220%200%20400%20200%22%3E%3Crect%20width%3D%22400%22%20height%3D%22200%22%20fill%3D%22%23111%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22%23333%22%20font-family%3D%22monospace%22%20font-size%3D%2220px%22%3ENo%20Image%3C%2Ftext%3E%3C%2Fsvg%3E'"/>
+          </div>
+          <h3 class="ebook-title">ICT / MSNR Playbook Not Recommended</h3>
+          <div class="tl-tags" style="margin-bottom: auto;">
+            <span class="tl-tag">ICT</span>
+            <span class="tl-tag">MSNR</span>
+            <span class="tl-tag">QT</span>
+          </div>
+          <a href="https://drive.google.com/drive/folders/1nCLQyQPE1qkomTjvMHe77Zbvh9Niy3li?usp=drive_link" target="_blank" class="btn-download">Download Free eBook</a>
+        </div>
+
+        <div class="ebook-card">
+          <span class="ebook-badge">Coming Soon</span>
+          <div class="ebook-card-img">
+            <img src="img/orderflow.jpg" alt="Order Flow Study" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22400%22%20height%3D%22200%22%20viewBox%3D%220%200%20400%20200%22%3E%3Crect%20width%3D%22400%22%20height%3D%22200%22%20fill%3D%22%23111%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20dominant-baseline%3D%22middle%22%20text-anchor%3D%22middle%22%20fill%3D%22%23333%22%20font-family%3D%22monospace%22%20font-size%3D%2220px%22%3ENo%20Image%3C%2Ftext%3E%3C%2Fsvg%3E'"/>
+          </div>
+          <h3 class="ebook-title">Order Flow Maxxing</h3>
+          <div class="tl-tags" style="margin-bottom: auto;">
+            <span class="tl-tag">Auction Market Theory</span>
+            <span class="tl-tag">Volume Profiles</span>
+            <span class="tl-tag">Time Price Opportunity</span>
+            <span class="tl-tag">Footprint</span>
+          </div>
+          <div class="btn-download" style="background:var(--border);color:var(--muted);cursor:not-allowed">Pending Release</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-layout">
+        <div class="contact-left fade-up">
+          <span class="sec-label">Contact</span>
+          <h2 class="sec-title">Let's connect.</h2>
+          <p>
+            Want to become a real trader?<br>Join our community let’s grow and level up together.
+          </p>
+        </div>
+        <div class="contact-right fade-up">
+          
+          <div class="contact-link" id="discordLink">
+            <div class="contact-link-label">
+              <div>
+                <div class="contact-link-name">Discord</div>
+                <div class="contact-link-sub">liam.ontape</div>
+              </div>
+            </div>
+            <span id="discordCopied">Copied!</span>
+            <span class="contact-link-arrow" id="discordArrow">↗</span>
+          </div>
+          
+          <a href="https://www.instagram.com/kuro_0w/" target="_blank" class="contact-link">
+            <div class="contact-link-label">
+              <div>
+                <div class="contact-link-name">Instagram</div>
+                <div class="contact-link-sub">@kuro_0w</div>
+              </div>
+            </div>
+            <span class="contact-link-arrow">↗</span>
+          </a>
+          
+          <a href="https://discord.gg/CZW8BspHp" target="_blank" class="contact-link">
+            <div class="contact-link-label">
+              <div>
+                <div class="contact-link-name">Community</div>
+                <div class="contact-link-sub">@FlowEdge - Thai Community</div>
+              </div>
+            </div>
+            <span class="contact-link-arrow">↗</span>
+          </a>
+
+          <a href="https://www.tiktok.com/@liam.ontape" target="_blank" class="contact-link">
+            <div class="contact-link-label">
+              <div>
+                <div class="contact-link-name">TikTok</div>
+                <div class="contact-link-sub">@liam.ontape</div>
+              </div>
+            </div>
+            <span class="contact-link-arrow">↗</span>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-logo">LiamX.AMT</span>
+    <div class="footer-links">
+      <a href="#about">About</a>
+      <a href="#skills">Skills</a>
+      <a href="#ebook">Ebook</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <span class="footer-copy">© LiamX.AMT. All rights reserved.</span>
+  </footer>
+
+  <script>
+    // ── Theme toggle ──────────────────────────────
+    const sunIcon = `<path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42M12 5a7 7 0 1 0 0 14A7 7 0 0 0 12 5z"/>`;
+    const moonIcon = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+
+    function applyTheme(isLight) {
+      const html = document.documentElement;
+      const icon = document.getElementById('themeIcon');
+      const label = document.getElementById('themeLabel');
+
+      if (isLight) {
+        html.classList.add('light');
+        icon.innerHTML = moonIcon;
+        label.textContent = "DARK";
+        localStorage.setItem('theme', 'light');
+      } else {
+        html.classList.remove('light');
+        icon.innerHTML = sunIcon;
+        label.textContent = "LIGHT";
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    function toggleTheme() {
+      const isLight = document.documentElement.classList.contains('light');
+      applyTheme(!isLight);
+    }
+
+    // Init theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') applyTheme(true);
+    else applyTheme(false); // default dark
+
+    // ── Mobile menu ───────────────────────────────
+    function openMobile() { document.getElementById('mobileNav').classList.add('open'); }
+    function closeMobile() { document.getElementById('mobileNav').classList.remove('open'); }
+
+    // ── Discord Copy ──────────────────────────────
+    const discordLink = document.getElementById('discordLink');
+    const discordCopied = document.getElementById('discordCopied');
+    const discordArrow = document.getElementById('discordArrow');
+    
+    if (discordLink) {
+        discordLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            navigator.clipboard.writeText('liam.ontape').then(() => {
+                discordArrow.style.display = 'none';
+                discordCopied.style.opacity = '1';
+                setTimeout(() => {
+                    discordCopied.style.opacity = '0';
+                    setTimeout(() => {
+                        discordArrow.style.display = '';
+                    }, 300);
+                }, 1500);
+            });
+        });
+    }
+
+    // ── Splash & Loader Logic ─────────────────────
+    const splash = document.getElementById('splash');
+    const loader = document.getElementById('loader');
+    const splashEnter = document.getElementById('splashEnter');
+    const loaderBar = document.getElementById('loaderBar');
+    const loaderText = document.getElementById('loaderText');
+    const siteContent = document.querySelectorAll('nav, section, footer');
+
+    if (!sessionStorage.getItem('splashSeen')) {
+        document.body.style.overflow = 'hidden';
+        siteContent.forEach(el => el.style.display = 'none');
+
+        splashEnter.addEventListener('click', () => {
+            splash.style.display = 'none';
+            loader.style.display = 'flex';
+            loader.style.opacity = '1';
+
+            setTimeout(() => {
+                loaderBar.style.width = '100%';
+                setTimeout(() => loaderText.textContent = 'Reading the tape...', 800);
+                setTimeout(() => loaderText.textContent = 'Loading your edge...', 1600);
+
+                setTimeout(() => {
+                    loader.style.opacity = '0';
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                        siteContent.forEach(el => {
+                            el.style.display = '';
+                            el.style.opacity = '0';
+                            // trigger reflow
+                            void el.offsetWidth;
+                            el.style.transition = 'opacity 0.6s ease';
+                            el.style.opacity = '1';
+                        });
+                        document.body.style.overflow = '';
+                        sessionStorage.setItem('splashSeen', 'true');
+                        setTimeout(() => {
+                            initIntersectionObserver();
+                        }, 100);
+                    }, 500);
+                }, 2500);
+            }, 50);
+        });
+    } else {
+        splash.style.display = 'none';
+        loader.style.display = 'none';
+        siteContent.forEach(el => el.style.display = '');
+        setTimeout(initIntersectionObserver, 100);
+    }
+
+    // ── Intersection Observer ─────────────────────
+    function initIntersectionObserver() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            observer.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+
+      document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    }
+  </script>
+</body>
+</html>
